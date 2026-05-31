@@ -1,0 +1,125 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Folium.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+             x:Class="Folium.Desktop.Views.PdfSplitView"
+             x:DataType="vm:PdfSplitViewModel">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="32">
+
+        <!-- Titre -->
+        <TextBlock Grid.Row="0"
+                   Text="Diviser un PDF"
+                   FontSize="22"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource BrushTextPrimary}"
+                   Margin="0,0,0,24" />
+
+        <!-- Fichier source -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto" Margin="0,0,0,16">
+            <TextBlock Grid.Row="0"
+                       Text="Fichier PDF source"
+                       Foreground="{DynamicResource BrushTextLabel}"
+                       Margin="0,0,0,8" />
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                <TextBox Grid.Column="0"
+                         Text="{Binding InputPath}"
+                         PlaceholderText="Sélectionner un fichier PDF..."
+                         Background="{DynamicResource BrushInputBg}"
+                         Foreground="{DynamicResource BrushTextPrimary}"
+                         BorderBrush="{DynamicResource BrushBorder}"
+                         CornerRadius="6"
+                         Padding="10,8"
+                         IsReadOnly="True" />
+                <Button Grid.Column="1"
+                        Content="Parcourir"
+                        Command="{Binding BrowseInputCommand}"
+                        Margin="8,0,0,0"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushTextPrimary}"
+                        Padding="12,8"
+                        CornerRadius="4" />
+            </Grid>
+        </Grid>
+
+        <!-- Plages de pages (optionnel) -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,Auto" Margin="0,0,0,16">
+            <TextBlock Grid.Row="0"
+                       Text="Plages de pages (optionnel) — ex : 1-3,5,7-9  |  vide = une page par fichier"
+                       Foreground="{DynamicResource BrushTextLabel}"
+                       Margin="0,0,0,8" />
+            <TextBox Grid.Row="1"
+                     Text="{Binding PageRanges}"
+                     PlaceholderText="Laisser vide pour une page par fichier"
+                     Background="{DynamicResource BrushInputBg}"
+                     Foreground="{DynamicResource BrushTextPrimary}"
+                     BorderBrush="{DynamicResource BrushBorder}"
+                     CornerRadius="6"
+                     Padding="10,8" />
+        </Grid>
+
+        <!-- Dossier de sortie -->
+        <Grid Grid.Row="3" RowDefinitions="Auto,Auto" Margin="0,0,0,16">
+            <TextBlock Grid.Row="0"
+                       Text="Dossier de sortie"
+                       Foreground="{DynamicResource BrushTextLabel}"
+                       Margin="0,0,0,8" />
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                <TextBox Grid.Column="0"
+                         Text="{Binding OutputDirectory}"
+                         PlaceholderText="Choisir un dossier..."
+                         Background="{DynamicResource BrushInputBg}"
+                         Foreground="{DynamicResource BrushTextPrimary}"
+                         BorderBrush="{DynamicResource BrushBorder}"
+                         CornerRadius="6"
+                         Padding="10,8"
+                         IsReadOnly="True" />
+                <Button Grid.Column="1"
+                        Content="Parcourir"
+                        Command="{Binding BrowseOutputFolderCommand}"
+                        Margin="8,0,0,0"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushTextPrimary}"
+                        Padding="12,8"
+                        CornerRadius="4" />
+            </Grid>
+        </Grid>
+
+        <!-- Action + progression + status -->
+        <StackPanel Grid.Row="4" Spacing="10">
+
+            <Button Content="Diviser"
+                    Command="{Binding SplitCommand}"
+                    HorizontalAlignment="Left"
+                    Background="{DynamicResource BrushAccent}"
+                    Foreground="{DynamicResource BrushOnAccent}"
+                    FontWeight="SemiBold"
+                    Padding="24,10"
+                    CornerRadius="6" />
+
+            <ProgressBar Value="{Binding ProgressValue}"
+                         Minimum="0"
+                         Maximum="100"
+                         IsVisible="{Binding IsBusy}"
+                         Height="4"
+                         CornerRadius="2"
+                         Foreground="{DynamicResource BrushAccent}"
+                         Background="{DynamicResource BrushProgressTrack}" />
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       IsVisible="{Binding !IsError}"
+                       Foreground="{DynamicResource BrushStatusSuccess}"
+                       TextWrapping="Wrap" />
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       IsVisible="{Binding IsError}"
+                       Foreground="{DynamicResource BrushStatusError}"
+                       TextWrapping="Wrap" />
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

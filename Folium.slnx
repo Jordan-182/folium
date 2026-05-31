@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Folium.Core/Folium.Core.csproj" />
+  <Project Path="Folium.Desktop/Folium.Desktop.csproj" />
+</Solution>

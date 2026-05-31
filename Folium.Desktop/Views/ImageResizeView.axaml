@@ -1,0 +1,159 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Folium.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+             x:Class="Folium.Desktop.Views.ImageResizeView"
+             x:DataType="vm:ImageResizeViewModel">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="32">
+
+        <!-- Titre -->
+        <TextBlock Grid.Row="0"
+                   Text="Redimensionner une image"
+                   FontSize="22"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource BrushTextPrimary}"
+                   Margin="0,0,0,24" />
+
+        <!-- Fichier source -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto" Margin="0,0,0,16">
+            <TextBlock Grid.Row="0"
+                       Text="Image source"
+                       Foreground="{DynamicResource BrushTextLabel}"
+                       Margin="0,0,0,8" />
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                <TextBox Grid.Column="0"
+                         Text="{Binding InputPath}"
+                         PlaceholderText="Sélectionner une image..."
+                         Background="{DynamicResource BrushInputBg}"
+                         Foreground="{DynamicResource BrushTextPrimary}"
+                         BorderBrush="{DynamicResource BrushBorder}"
+                         CornerRadius="6"
+                         Padding="10,8"
+                         IsReadOnly="True" />
+                <Button Grid.Column="1"
+                        Content="Parcourir"
+                        Command="{Binding BrowseInputCommand}"
+                        Margin="8,0,0,0"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushTextPrimary}"
+                        Padding="12,8"
+                        CornerRadius="4" />
+            </Grid>
+        </Grid>
+
+        <!-- Dimensions -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" Margin="0,0,0,16">
+
+            <TextBlock Grid.Row="0"
+                       Text="Dimensions (0 = proportionnel)"
+                       Foreground="{DynamicResource BrushTextLabel}"
+                       Margin="0,0,0,8" />
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,*" Margin="0,0,0,8">
+                <Grid Grid.Column="0" RowDefinitions="Auto,Auto">
+                    <TextBlock Grid.Row="0"
+                               Text="Largeur (px)"
+                               Foreground="{DynamicResource BrushTextLabel}"
+                               FontSize="12"
+                               Margin="0,0,0,4" />
+                    <NumericUpDown Grid.Row="1"
+                                   Value="{Binding Width}"
+                                   Minimum="0"
+                                   Maximum="99999"
+                                   Increment="10"
+                                   Background="{DynamicResource BrushInputBg}"
+                                   Foreground="{DynamicResource BrushTextPrimary}"
+                                   BorderBrush="{DynamicResource BrushBorder}"
+                                   CornerRadius="6" />
+                </Grid>
+
+                <TextBlock Grid.Column="1"
+                           Text="×"
+                           Foreground="{DynamicResource BrushTextHelper}"
+                           FontSize="20"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Center"
+                           Margin="16,0,16,4" />
+
+                <Grid Grid.Column="2" RowDefinitions="Auto,Auto">
+                    <TextBlock Grid.Row="0"
+                               Text="Hauteur (px)"
+                               Foreground="{DynamicResource BrushTextLabel}"
+                               FontSize="12"
+                               Margin="0,0,0,4" />
+                    <NumericUpDown Grid.Row="1"
+                                   Value="{Binding Height}"
+                                   Minimum="0"
+                                   Maximum="99999"
+                                   Increment="10"
+                                   Background="{DynamicResource BrushInputBg}"
+                                   Foreground="{DynamicResource BrushTextPrimary}"
+                                   BorderBrush="{DynamicResource BrushBorder}"
+                                   CornerRadius="6" />
+                </Grid>
+            </Grid>
+
+            <CheckBox Grid.Row="2"
+                      Content="Conserver le ratio d'aspect"
+                      IsChecked="{Binding MaintainAspectRatio}"
+                      Foreground="{DynamicResource BrushTextPrimary}" />
+
+        </Grid>
+
+        <!-- Fichier de sortie -->
+        <Grid Grid.Row="3" RowDefinitions="Auto,Auto" Margin="0,0,0,16">
+            <TextBlock Grid.Row="0"
+                       Text="Fichier de sortie"
+                       Foreground="{DynamicResource BrushTextLabel}"
+                       Margin="0,0,0,8" />
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                <TextBox Grid.Column="0"
+                         Text="{Binding OutputPath}"
+                         PlaceholderText="Enregistrer sous..."
+                         Background="{DynamicResource BrushInputBg}"
+                         Foreground="{DynamicResource BrushTextPrimary}"
+                         BorderBrush="{DynamicResource BrushBorder}"
+                         CornerRadius="6"
+                         Padding="10,8"
+                         IsReadOnly="True" />
+                <Button Grid.Column="1"
+                        Content="Parcourir"
+                        Command="{Binding BrowseOutputCommand}"
+                        Margin="8,0,0,0"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushTextPrimary}"
+                        Padding="12,8"
+                        CornerRadius="4" />
+            </Grid>
+        </Grid>
+
+        <!-- Action + status -->
+        <StackPanel Grid.Row="4" Spacing="10">
+
+            <Button Content="Redimensionner"
+                    Command="{Binding ResizeCommand}"
+                    HorizontalAlignment="Left"
+                    Background="{DynamicResource BrushAccent}"
+                    Foreground="{DynamicResource BrushOnAccent}"
+                    FontWeight="SemiBold"
+                    Padding="24,10"
+                    CornerRadius="6" />
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       IsVisible="{Binding !IsError}"
+                       Foreground="{DynamicResource BrushStatusSuccess}"
+                       TextWrapping="Wrap" />
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       IsVisible="{Binding IsError}"
+                       Foreground="{DynamicResource BrushStatusError}"
+                       TextWrapping="Wrap" />
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

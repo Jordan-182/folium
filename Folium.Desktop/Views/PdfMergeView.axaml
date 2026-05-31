@@ -1,0 +1,144 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Folium.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+             x:Class="Folium.Desktop.Views.PdfMergeView"
+             x:DataType="vm:PdfMergeViewModel">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto" Margin="32">
+
+        <!-- Titre -->
+        <TextBlock Grid.Row="0"
+                   Text="Fusionner des PDFs"
+                   FontSize="22"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource BrushTextPrimary}"
+                   Margin="0,0,0,20" />
+
+        <!-- Liste des fichiers -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*,Auto" Margin="0,0,0,16">
+
+            <TextBlock Grid.Row="0"
+                       Text="Fichiers à fusionner (dans l'ordre)"
+                       Foreground="{DynamicResource BrushTextLabel}"
+                       Margin="0,0,0,8" />
+
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding InputFiles}"
+                     SelectedItem="{Binding SelectedFile}"
+                     Background="{DynamicResource BrushInputBg}"
+                     BorderBrush="{DynamicResource BrushBorder}"
+                     BorderThickness="1"
+                     CornerRadius="6"
+                     MinHeight="160">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                                   Foreground="{DynamicResource BrushTextPrimary}"
+                                   Padding="4,2" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- Boutons liste -->
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        Spacing="8"
+                        Margin="0,8,0,0">
+
+                <Button Content="+ Ajouter"
+                        Command="{Binding AddFilesCommand}"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushTextPrimary}"
+                        Padding="12,6"
+                        CornerRadius="4" />
+
+                <Button Content="Supprimer"
+                        Command="{Binding RemoveFileCommand}"
+                        CommandParameter="{Binding SelectedFile}"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushStatusError}"
+                        Padding="12,6"
+                        CornerRadius="4" />
+
+                <Button Content="↑"
+                        Command="{Binding MoveUpCommand}"
+                        CommandParameter="{Binding SelectedFile}"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushTextPrimary}"
+                        Padding="12,6"
+                        CornerRadius="4" />
+
+                <Button Content="↓"
+                        Command="{Binding MoveDownCommand}"
+                        CommandParameter="{Binding SelectedFile}"
+                        Background="{DynamicResource BrushSecondaryBtnBg}"
+                        Foreground="{DynamicResource BrushTextPrimary}"
+                        Padding="12,6"
+                        CornerRadius="4" />
+
+            </StackPanel>
+        </Grid>
+
+        <!-- Chemin de sortie -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+
+            <TextBox Grid.Column="0"
+                     Text="{Binding OutputPath}"
+                     PlaceholderText="Fichier de sortie (.pdf)"
+                     Background="{DynamicResource BrushInputBg}"
+                     Foreground="{DynamicResource BrushTextPrimary}"
+                     BorderBrush="{DynamicResource BrushBorder}"
+                     CornerRadius="6"
+                     Padding="10,8"
+                     IsReadOnly="True" />
+
+            <Button Grid.Column="1"
+                    Content="Parcourir"
+                    Command="{Binding BrowseOutputCommand}"
+                    Margin="8,0,0,0"
+                    Background="{DynamicResource BrushSecondaryBtnBg}"
+                    Foreground="{DynamicResource BrushTextPrimary}"
+                    Padding="12,8"
+                    CornerRadius="4" />
+
+        </Grid>
+
+        <!-- Action + progression + status -->
+        <StackPanel Grid.Row="3" Spacing="10">
+
+            <Button Content="Fusionner"
+                    Command="{Binding MergeCommand}"
+                    HorizontalAlignment="Left"
+                    Background="{DynamicResource BrushAccent}"
+                    Foreground="{DynamicResource BrushOnAccent}"
+                    FontWeight="SemiBold"
+                    Padding="24,10"
+                    CornerRadius="6" />
+
+            <ProgressBar Value="{Binding ProgressValue}"
+                         Minimum="0"
+                         Maximum="100"
+                         IsVisible="{Binding IsBusy}"
+                         Height="4"
+                         CornerRadius="2"
+                         Foreground="{DynamicResource BrushAccent}"
+                         Background="{DynamicResource BrushProgressTrack}" />
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       IsVisible="{Binding !IsError}"
+                       Foreground="{DynamicResource BrushStatusSuccess}"
+                       TextWrapping="Wrap" />
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       IsVisible="{Binding IsError}"
+                       Foreground="{DynamicResource BrushStatusError}"
+                       TextWrapping="Wrap" />
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>
