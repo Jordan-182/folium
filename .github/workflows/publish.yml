@@ -44,11 +44,11 @@ jobs:
       - name: Archive (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: Compress-Archive -Path out/${{ matrix.rid }}/* -DestinationPath Folium-${{ github.ref_name }}-${{ matrix.rid }}.zip
+        run: Compress-Archive -Path out/${{ matrix.rid }}/Folium.Desktop.exe -DestinationPath Folium-${{ github.ref_name }}-${{ matrix.rid }}.zip
 
       - name: Archive (Unix)
         if: runner.os != 'Windows'
-        run: tar -czf Folium-${{ github.ref_name }}-${{ matrix.rid }}.tar.gz -C out/${{ matrix.rid }} .
+        run: tar -czf Folium-${{ github.ref_name }}-${{ matrix.rid }}.tar.gz -C out/${{ matrix.rid }} Folium.Desktop
 
       - uses: actions/upload-artifact@v4
         with:
